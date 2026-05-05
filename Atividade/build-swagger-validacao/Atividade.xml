@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Atividade</name>
+    </assembly>
+    <members>
+        <member name="T:Atividade.Controllers.CatalogoController">
+            <summary>
+            Disponibiliza consultas do catalogo do streaming.
+            </summary>
+        </member>
+        <member name="M:Atividade.Controllers.CatalogoController.#ctor(Atividade.Services.StreamingRepository)">
+            <summary>
+            Disponibiliza consultas do catalogo do streaming.
+            </summary>
+        </member>
+        <member name="M:Atividade.Controllers.CatalogoController.Get">
+            <summary>
+            Lista todo o catalogo disponivel.
+            </summary>
+            <returns>Uma lista com filmes, series e documentarios.</returns>
+        </member>
+        <member name="M:Atividade.Controllers.CatalogoController.GetEmAlta">
+            <summary>
+            Lista apenas os conteudos marcados como em alta.
+            </summary>
+            <returns>Uma lista com os destaques do catalogo.</returns>
+        </member>
+        <member name="M:Atividade.Controllers.CatalogoController.GetById(System.Int32)">
+            <summary>
+            Busca um conteudo especifico pelo identificador.
+            </summary>
+            <param name="id">Codigo do conteudo.</param>
+            <returns>O conteudo encontrado ou um retorno 404.</returns>
+        </member>
+        <member name="T:Atividade.Controllers.PlanosController">
+            <summary>
+            Disponibiliza a consulta dos planos de assinatura.
+            </summary>
+        </member>
+        <member name="M:Atividade.Controllers.PlanosController.#ctor(Atividade.Services.StreamingRepository)">
+            <summary>
+            Disponibiliza a consulta dos planos de assinatura.
+            </summary>
+        </member>
+        <member name="M:Atividade.Controllers.PlanosController.Get">
+            <summary>
+            Lista os planos disponiveis no streaming.
+            </summary>
+            <returns>Uma lista com os planos e seus beneficios.</returns>
+        </member>
+        <member name="T:Atividade.Models.ConteudoStreaming">
+            <summary>
+            Representa um titulo disponivel no catalogo do streaming.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.ConteudoStreaming.Id">
+            <summary>
+            Identificador unico do conteudo.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.ConteudoStreaming.Titulo">
+            <summary>
+            Nome exibido para o usuario.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.ConteudoStreaming.Categoria">
+            <summary>
+            Tipo principal do conteudo, como filme ou serie.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.ConteudoStreaming.Genero">
+            <summary>
+            Genero predominante do titulo.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.ConteudoStreaming.AnoLancamento">
+            <summary>
+            Ano de lancamento do conteudo.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.ConteudoStreaming.DuracaoMinutos">
+            <summary>
+            Duracao em minutos.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.ConteudoStreaming.ClassificacaoIndicativa">
+            <summary>
+            Faixa etaria recomendada.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.ConteudoStreaming.EmAlta">
+            <summary>
+            Indica se o titulo esta em destaque na plataforma.
+            </summary>
+        </member>
+        <member name="T:Atividade.Models.PlanoStreaming">
+            <summary>
+            Representa um plano de assinatura da plataforma.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.PlanoStreaming.Id">
+            <summary>
+            Identificador unico do plano.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.PlanoStreaming.Nome">
+            <summary>
+            Nome comercial do plano.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.PlanoStreaming.PrecoMensal">
+            <summary>
+            Valor da assinatura mensal.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.PlanoStreaming.QualidadeVideo">
+            <summary>
+            Qualidade maxima de video oferecida.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.PlanoStreaming.QuantidadeTelas">
+            <summary>
+            Quantidade de telas simultaneas permitidas.
+            </summary>
+        </member>
+        <member name="T:Atividade.Services.StreamingRepository">
+            <summary>
+            Repositorio em memoria com dados de exemplo do streaming.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.ListarCatalogo">
+            <summary>
+            Retorna todos os titulos do catalogo.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.ListarEmAlta">
+            <summary>
+            Retorna apenas os titulos marcados como em alta.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.BuscarConteudoPorId(System.Int32)">
+            <summary>
+            Busca um conteudo pelo identificador.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.ListarPlanos">
+            <summary>
+            Retorna os planos de assinatura disponiveis.
+            </summary>
+        </member>
+        <member name="T:Program">
+            <summary>
+            Auto-generated public partial Program class for top-level statement apps.
+            </summary>
+        </member>
+    </members>
+</doc>

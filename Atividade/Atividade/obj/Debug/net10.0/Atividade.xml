@@ -1,0 +1,317 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Atividade</name>
+    </assembly>
+    <members>
+        <member name="T:Atividade.Controllers.CatalogoController">
+            <summary>
+            Disponibiliza consultas do catalogo do streaming.
+            </summary>
+        </member>
+        <member name="M:Atividade.Controllers.CatalogoController.#ctor(Atividade.Services.StreamingRepository)">
+            <summary>
+            Disponibiliza consultas do catalogo do streaming.
+            </summary>
+        </member>
+        <member name="M:Atividade.Controllers.CatalogoController.Get(System.String,System.String,System.Nullable{System.Boolean})">
+            <summary>
+            Lista todo o catalogo disponivel.
+            </summary>
+            <param name="categoria">Filtro opcional por categoria.</param>
+            <param name="genero">Filtro opcional por genero.</param>
+            <param name="emAlta">Filtro opcional para conteudos em destaque.</param>
+            <returns>Uma lista com filmes, series e documentarios.</returns>
+        </member>
+        <member name="M:Atividade.Controllers.CatalogoController.GetEmAlta">
+            <summary>
+            Lista apenas os conteudos marcados como em alta.
+            </summary>
+            <returns>Uma lista com os destaques do catalogo.</returns>
+        </member>
+        <member name="M:Atividade.Controllers.CatalogoController.GetById(System.Int32)">
+            <summary>
+            Busca um conteudo especifico pelo identificador.
+            </summary>
+            <param name="id">Codigo do conteudo.</param>
+            <returns>O conteudo encontrado ou um retorno 404.</returns>
+        </member>
+        <member name="M:Atividade.Controllers.CatalogoController.Post(Atividade.Requests.CriarConteudoRequest)">
+            <summary>
+            Cadastra um novo conteudo no catalogo.
+            </summary>
+            <param name="request">Dados do conteudo a ser cadastrado.</param>
+            <returns>O conteudo criado.</returns>
+        </member>
+        <member name="M:Atividade.Controllers.CatalogoController.Put(System.Int32,Atividade.Requests.AtualizarConteudoRequest)">
+            <summary>
+            Atualiza os dados de um conteudo do catalogo.
+            </summary>
+            <param name="id">Codigo do conteudo.</param>
+            <param name="request">Novos dados do conteudo.</param>
+            <returns>O conteudo atualizado ou um retorno 404.</returns>
+        </member>
+        <member name="M:Atividade.Controllers.CatalogoController.Delete(System.Int32)">
+            <summary>
+            Remove um conteudo do catalogo.
+            </summary>
+            <param name="id">Codigo do conteudo.</param>
+            <returns>Sem conteudo no retorno quando a exclusao ocorrer.</returns>
+        </member>
+        <member name="T:Atividade.Controllers.PlanosController">
+            <summary>
+            Disponibiliza a consulta dos planos de assinatura.
+            </summary>
+        </member>
+        <member name="M:Atividade.Controllers.PlanosController.#ctor(Atividade.Services.StreamingRepository)">
+            <summary>
+            Disponibiliza a consulta dos planos de assinatura.
+            </summary>
+        </member>
+        <member name="M:Atividade.Controllers.PlanosController.Get">
+            <summary>
+            Lista os planos disponiveis no streaming.
+            </summary>
+            <returns>Uma lista com os planos e seus beneficios.</returns>
+        </member>
+        <member name="M:Atividade.Controllers.PlanosController.GetById(System.Int32)">
+            <summary>
+            Busca um plano especifico pelo identificador.
+            </summary>
+            <param name="id">Codigo do plano.</param>
+            <returns>O plano encontrado ou um retorno 404.</returns>
+        </member>
+        <member name="M:Atividade.Controllers.PlanosController.Post(Atividade.Requests.CriarPlanoRequest)">
+            <summary>
+            Cadastra um novo plano de assinatura.
+            </summary>
+            <param name="request">Dados do plano a ser cadastrado.</param>
+            <returns>O plano criado.</returns>
+        </member>
+        <member name="M:Atividade.Controllers.PlanosController.Put(System.Int32,Atividade.Requests.AtualizarPlanoRequest)">
+            <summary>
+            Atualiza os dados de um plano de assinatura.
+            </summary>
+            <param name="id">Codigo do plano.</param>
+            <param name="request">Novos dados do plano.</param>
+            <returns>O plano atualizado ou um retorno 404.</returns>
+        </member>
+        <member name="M:Atividade.Controllers.PlanosController.Delete(System.Int32)">
+            <summary>
+            Remove um plano de assinatura.
+            </summary>
+            <param name="id">Codigo do plano.</param>
+            <returns>Sem conteudo no retorno quando a exclusao ocorrer.</returns>
+        </member>
+        <member name="T:Atividade.Models.ConteudoStreaming">
+            <summary>
+            Representa um titulo disponivel no catalogo do streaming.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.ConteudoStreaming.Id">
+            <summary>
+            Identificador unico do conteudo.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.ConteudoStreaming.Titulo">
+            <summary>
+            Nome exibido para o usuario.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.ConteudoStreaming.Categoria">
+            <summary>
+            Tipo principal do conteudo, como filme ou serie.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.ConteudoStreaming.Genero">
+            <summary>
+            Genero predominante do titulo.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.ConteudoStreaming.AnoLancamento">
+            <summary>
+            Ano de lancamento do conteudo.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.ConteudoStreaming.DuracaoMinutos">
+            <summary>
+            Duracao em minutos.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.ConteudoStreaming.ClassificacaoIndicativa">
+            <summary>
+            Faixa etaria recomendada.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.ConteudoStreaming.EmAlta">
+            <summary>
+            Indica se o titulo esta em destaque na plataforma.
+            </summary>
+        </member>
+        <member name="T:Atividade.Models.PlanoStreaming">
+            <summary>
+            Representa um plano de assinatura da plataforma.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.PlanoStreaming.Id">
+            <summary>
+            Identificador unico do plano.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.PlanoStreaming.Nome">
+            <summary>
+            Nome comercial do plano.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.PlanoStreaming.PrecoMensal">
+            <summary>
+            Valor da assinatura mensal.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.PlanoStreaming.QualidadeVideo">
+            <summary>
+            Qualidade maxima de video oferecida.
+            </summary>
+        </member>
+        <member name="P:Atividade.Models.PlanoStreaming.QuantidadeTelas">
+            <summary>
+            Quantidade de telas simultaneas permitidas.
+            </summary>
+        </member>
+        <member name="T:Atividade.Services.StreamingRepository">
+            <summary>
+            Repositorio em memoria com dados de exemplo do streaming.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.ListarCatalogo(System.String,System.String,System.Nullable{System.Boolean})">
+            <summary>
+            Retorna todos os titulos do catalogo.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.ListarEmAlta">
+            <summary>
+            Retorna apenas os titulos marcados como em alta.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.BuscarConteudoPorId(System.Int32)">
+            <summary>
+            Busca um conteudo pelo identificador.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.AdicionarConteudo(Atividade.Requests.CriarConteudoRequest)">
+            <summary>
+            Adiciona um novo conteudo ao catalogo.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.AtualizarConteudo(System.Int32,Atividade.Requests.AtualizarConteudoRequest)">
+            <summary>
+            Atualiza os dados de um conteudo existente.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.RemoverConteudo(System.Int32)">
+            <summary>
+            Remove um conteudo do catalogo.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.ListarPlanos">
+            <summary>
+            Retorna os planos de assinatura disponiveis.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.BuscarPlanoPorId(System.Int32)">
+            <summary>
+            Busca um plano pelo identificador.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.ExisteNomePlano(System.String,System.Nullable{System.Int32})">
+            <summary>
+            Verifica se ja existe um plano com o mesmo nome.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.AdicionarPlano(Atividade.Requests.CriarPlanoRequest)">
+            <summary>
+            Adiciona um novo plano de assinatura.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.AtualizarPlano(System.Int32,Atividade.Requests.AtualizarPlanoRequest)">
+            <summary>
+            Atualiza um plano existente.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.RemoverPlano(System.Int32)">
+            <summary>
+            Remove um plano existente.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.PlanoEstaEmUso(System.Int32)">
+            <summary>
+            Verifica se um plano possui assinantes vinculados.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.ListarAssinantes(System.Nullable{System.Boolean},System.Nullable{System.Int32})">
+            <summary>
+            Retorna os assinantes cadastrados.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.BuscarAssinantePorId(System.Int32)">
+            <summary>
+            Busca um assinante pelo identificador.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.ExisteEmailAssinante(System.String,System.Nullable{System.Int32})">
+            <summary>
+            Verifica se ja existe um assinante com o mesmo email.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.AdicionarAssinante(Atividade.Requests.CriarAssinanteRequest)">
+            <summary>
+            Adiciona um novo assinante.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.AtualizarAssinante(System.Int32,Atividade.Requests.AtualizarAssinanteRequest)">
+            <summary>
+            Atualiza os dados de um assinante.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.RemoverAssinante(System.Int32)">
+            <summary>
+            Remove um assinante do sistema.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.ListarPerfis(System.Int32)">
+            <summary>
+            Retorna os perfis de um assinante.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.PodeAdicionarMaisPerfis(System.Int32)">
+            <summary>
+            Verifica se o assinante ainda pode criar mais perfis.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.ExisteNomePerfil(System.Int32,System.String)">
+            <summary>
+            Verifica se ja existe um perfil com o mesmo nome para o assinante.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.AdicionarPerfil(System.Int32,Atividade.Requests.CriarPerfilRequest)">
+            <summary>
+            Adiciona um novo perfil para um assinante.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.RemoverPerfil(System.Int32,System.Int32)">
+            <summary>
+            Remove um perfil de um assinante.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.ObterResumo">
+            <summary>
+            Retorna um resumo geral da plataforma.
+            </summary>
+        </member>
+        <member name="T:Program">
+            <summary>
+            Auto-generated public partial Program class for top-level statement apps.
+            </summary>
+        </member>
+    </members>
+</doc>

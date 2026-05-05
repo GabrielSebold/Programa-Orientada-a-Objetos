@@ -1,0 +1,116 @@
+@Atividade_HostAddress = http://localhost:5083
+
+GET {{Atividade_HostAddress}}/
+Accept: application/json
+
+###
+
+GET {{Atividade_HostAddress}}/api/dashboard/resumo
+Accept: application/json
+
+###
+
+GET {{Atividade_HostAddress}}/api/catalogo
+Accept: application/json
+
+###
+
+GET {{Atividade_HostAddress}}/api/catalogo?categoria=Filme&emAlta=true
+Accept: application/json
+
+###
+
+GET {{Atividade_HostAddress}}/api/catalogo/2
+Accept: application/json
+
+###
+
+POST {{Atividade_HostAddress}}/api/catalogo
+Content-Type: application/json
+
+{
+  "titulo": "Codigo Sob Demanda",
+  "categoria": "Serie",
+  "genero": "Tecnologia",
+  "anoLancamento": 2026,
+  "duracaoMinutos": 45,
+  "classificacaoIndicativa": 12,
+  "emAlta": true
+}
+
+###
+
+PUT {{Atividade_HostAddress}}/api/catalogo/2
+Content-Type: application/json
+
+{
+  "titulo": "Cidade em Codigo - Temporada 1",
+  "categoria": "Serie",
+  "genero": "Drama",
+  "anoLancamento": 2025,
+  "duracaoMinutos": 52,
+  "classificacaoIndicativa": 16,
+  "emAlta": true
+}
+
+###
+
+GET {{Atividade_HostAddress}}/api/planos
+Accept: application/json
+
+###
+
+GET {{Atividade_HostAddress}}/api/planos/1
+Accept: application/json
+
+###
+
+POST {{Atividade_HostAddress}}/api/planos
+Content-Type: application/json
+
+{
+  "nome": "Familia Plus",
+  "precoMensal": 49.90,
+  "qualidadeVideo": "4K",
+  "quantidadeTelas": 5
+}
+
+###
+
+GET {{Atividade_HostAddress}}/api/assinantes
+Accept: application/json
+
+###
+
+GET {{Atividade_HostAddress}}/api/assinantes?ativo=true
+Accept: application/json
+
+###
+
+GET {{Atividade_HostAddress}}/api/assinantes/1
+Accept: application/json
+
+###
+
+POST {{Atividade_HostAddress}}/api/assinantes
+Content-Type: application/json
+
+{
+  "nome": "Marina Costa",
+  "email": "marina@streamplay.com",
+  "planoId": 3,
+  "ativo": true
+}
+
+###
+
+POST {{Atividade_HostAddress}}/api/assinantes/1/perfis
+Content-Type: application/json
+
+{
+  "nome": "Series",
+  "idioma": "Portugues",
+  "infantil": false
+}
+
+###
