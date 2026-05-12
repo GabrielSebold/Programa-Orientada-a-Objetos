@@ -1,4 +1,6 @@
+using Atividade.Data;
 using Atividade.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using System.Reflection;
 
@@ -8,7 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSingleton<StreamingRepository>();
+builder.Services.AddDbContext<StreamingDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<StreamingRepository>();
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -47,6 +51,13 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<StreamingDbContext>();
+    await context.Database.EnsureCreatedAsync();
+    await StreamingSeeder.SeedAsync(context);
+}
 
 app.MapGet("/", () => Results.Ok(new
 {

@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Atividade.Models;
 
 public class AssinanteStreaming
@@ -9,6 +11,9 @@ public class AssinanteStreaming
     public string Email { get; set; } = string.Empty;
 
     public int PlanoId { get; set; }
+
+    [JsonIgnore]
+    public PlanoStreaming? Plano { get; set; }
 
     public bool Ativo { get; set; }
 

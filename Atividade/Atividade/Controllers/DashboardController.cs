@@ -9,9 +9,9 @@ public class DashboardController(StreamingRepository repository) : ControllerBas
 {
     [HttpGet("resumo")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult GetResumo()
+    public async Task<IActionResult> GetResumo()
     {
-        var resumo = repository.ObterResumo();
+        var resumo = await repository.ObterResumoAsync();
         return Ok(resumo);
     }
 }

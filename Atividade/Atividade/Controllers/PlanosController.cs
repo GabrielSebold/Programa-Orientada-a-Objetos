@@ -17,9 +17,9 @@ public class PlanosController(StreamingRepository repository) : ControllerBase
     /// <returns>Uma lista com os planos e seus beneficios.</returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult Get()
+    public async Task<IActionResult> Get()
     {
-        var planos = repository.ListarPlanos();
+        var planos = await repository.ListarPlanosAsync();
         return Ok(planos);
     }
 
@@ -31,9 +31,9 @@ public class PlanosController(StreamingRepository repository) : ControllerBase
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        var plano = repository.BuscarPlanoPorId(id);
+        var plano = await repository.BuscarPlanoPorIdAsync(id);
 
         if (plano is null)
         {
@@ -52,14 +52,14 @@ public class PlanosController(StreamingRepository repository) : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public IActionResult Post([FromBody] CriarPlanoRequest request)
+    public async Task<IActionResult> Post([FromBody] CriarPlanoRequest request)
     {
-        if (repository.ExisteNomePlano(request.Nome))
+        if (await repository.ExisteNomePlanoAsync(request.Nome))
         {
             return Conflict(new { mensagem = "Ja existe um plano com esse nome." });
         }
 
-        var plano = repository.AdicionarPlano(request);
+        var plano = await repository.AdicionarPlanoAsync(request);
         return CreatedAtAction(nameof(GetById), new { id = plano.Id }, plano);
     }
 
@@ -74,19 +74,19 @@ public class PlanosController(StreamingRepository repository) : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public IActionResult Put(int id, [FromBody] AtualizarPlanoRequest request)
+    public async Task<IActionResult> Put(int id, [FromBody] AtualizarPlanoRequest request)
     {
-        if (repository.BuscarPlanoPorId(id) is null)
+        if (await repository.BuscarPlanoPorIdAsync(id) is null)
         {
             return NotFound(new { mensagem = "Plano nao encontrado." });
         }
 
-        if (repository.ExisteNomePlano(request.Nome, id))
+        if (await repository.ExisteNomePlanoAsync(request.Nome, id))
         {
             return Conflict(new { mensagem = "Ja existe um plano com esse nome." });
         }
 
-        var planoAtualizado = repository.AtualizarPlano(id, request);
+        var planoAtualizado = await repository.AtualizarPlanoAsync(id, request);
         return Ok(planoAtualizado);
     }
 
@@ -99,19 +99,19 @@ public class PlanosController(StreamingRepository repository) : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        if (repository.BuscarPlanoPorId(id) is null)
+        if (await repository.BuscarPlanoPorIdAsync(id) is null)
         {
             return NotFound(new { mensagem = "Plano nao encontrado." });
         }
 
-        if (repository.PlanoEstaEmUso(id))
+        if (await repository.PlanoEstaEmUsoAsync(id))
         {
             return Conflict(new { mensagem = "O plano possui assinantes vinculados e nao pode ser removido." });
         }
 
-        repository.RemoverPlano(id);
+        await repository.RemoverPlanoAsync(id);
         return NoContent();
     }
 }

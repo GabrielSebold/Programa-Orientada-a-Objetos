@@ -1,1 +1,9 @@
 .vs/
+bin/
+obj/
+build-*/
+*.user
+*.suo
+*.db
+*.db-shm
+*.db-wal

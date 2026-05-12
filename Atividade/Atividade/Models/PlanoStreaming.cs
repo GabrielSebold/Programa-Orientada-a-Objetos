@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Atividade.Models;
 
 /// <summary>
@@ -29,4 +31,7 @@ public class PlanoStreaming
     /// Quantidade de telas simultaneas permitidas.
     /// </summary>
     public int QuantidadeTelas { get; set; }
+
+    [JsonIgnore]
+    public List<AssinanteStreaming> Assinantes { get; set; } = [];
 }

@@ -1,160 +1,37 @@
+using Atividade.Data;
 using Atividade.Models;
 using Atividade.Requests;
+using Microsoft.EntityFrameworkCore;
 
 namespace Atividade.Services;
 
 /// <summary>
-/// Repositorio em memoria com dados de exemplo do streaming.
+/// Repositorio com persistencia via Entity Framework Core.
 /// </summary>
-public class StreamingRepository
+public class StreamingRepository(StreamingDbContext context)
 {
     private const int LimitePerfisPorAssinante = 5;
-
-    private readonly List<ConteudoStreaming> _catalogo =
-    [
-        new()
-        {
-            Id = 1,
-            Titulo = "Horizonte Final",
-            Categoria = "Filme",
-            Genero = "Ficcao Cientifica",
-            AnoLancamento = 2024,
-            DuracaoMinutos = 118,
-            ClassificacaoIndicativa = 14,
-            EmAlta = true
-        },
-        new()
-        {
-            Id = 2,
-            Titulo = "Cidade em Codigo",
-            Categoria = "Serie",
-            Genero = "Drama",
-            AnoLancamento = 2025,
-            DuracaoMinutos = 50,
-            ClassificacaoIndicativa = 16,
-            EmAlta = true
-        },
-        new()
-        {
-            Id = 3,
-            Titulo = "Noite Pixelada",
-            Categoria = "Filme",
-            Genero = "Suspense",
-            AnoLancamento = 2023,
-            DuracaoMinutos = 104,
-            ClassificacaoIndicativa = 16,
-            EmAlta = false
-        },
-        new()
-        {
-            Id = 4,
-            Titulo = "Arena dos Campeoes",
-            Categoria = "Documentario",
-            Genero = "Esportes",
-            AnoLancamento = 2022,
-            DuracaoMinutos = 92,
-            ClassificacaoIndicativa = 10,
-            EmAlta = false
-        }
-    ];
-
-    private readonly List<PlanoStreaming> _planos =
-    [
-        new()
-        {
-            Id = 1,
-            Nome = "Basico",
-            PrecoMensal = 19.90m,
-            QualidadeVideo = "HD",
-            QuantidadeTelas = 1
-        },
-        new()
-        {
-            Id = 2,
-            Nome = "Padrao",
-            PrecoMensal = 29.90m,
-            QualidadeVideo = "Full HD",
-            QuantidadeTelas = 2
-        },
-        new()
-        {
-            Id = 3,
-            Nome = "Premium",
-            PrecoMensal = 39.90m,
-            QualidadeVideo = "4K",
-            QuantidadeTelas = 4
-        }
-    ];
-
-    private readonly List<AssinanteStreaming> _assinantes =
-    [
-        new()
-        {
-            Id = 1,
-            Nome = "Ana Souza",
-            Email = "ana@streamplay.com",
-            PlanoId = 2,
-            Ativo = true,
-            DataAssinatura = new DateTime(2026, 1, 10),
-            Perfis =
-            [
-                new()
-                {
-                    Id = 1,
-                    Nome = "Ana",
-                    Idioma = "Portugues",
-                    Infantil = false
-                },
-                new()
-                {
-                    Id = 2,
-                    Nome = "Kids",
-                    Idioma = "Portugues",
-                    Infantil = true
-                }
-            ]
-        },
-        new()
-        {
-            Id = 2,
-            Nome = "Lucas Lima",
-            Email = "lucas@streamplay.com",
-            PlanoId = 1,
-            Ativo = true,
-            DataAssinatura = new DateTime(2026, 2, 5),
-            Perfis =
-            [
-                new()
-                {
-                    Id = 1,
-                    Nome = "Lucas",
-                    Idioma = "Portugues",
-                    Infantil = false
-                }
-            ]
-        }
-    ];
 
     /// <summary>
     /// Retorna todos os titulos do catalogo.
     /// </summary>
-    public IReadOnlyList<ConteudoStreaming> ListarCatalogo(
+    public async Task<IReadOnlyList<ConteudoStreaming>> ListarCatalogoAsync(
         string? categoria = null,
         string? genero = null,
         bool? emAlta = null)
     {
-        IEnumerable<ConteudoStreaming> query = _catalogo;
+        IQueryable<ConteudoStreaming> query = context.Conteudos.AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(categoria))
         {
             query = query.Where(conteudo =>
-                conteudo.Categoria.Equals(categoria, StringComparison.OrdinalIgnoreCase));
+                conteudo.Categoria.ToLower() == categoria.ToLower());
         }
 
         if (!string.IsNullOrWhiteSpace(genero))
         {
             query = query.Where(conteudo =>
-                conteudo.Genero.Equals(genero, StringComparison.OrdinalIgnoreCase));
+                conteudo.Genero.ToLower() == genero.ToLower());
         }
 
         if (emAlta.HasValue)
@@ -162,29 +39,31 @@ public class StreamingRepository
             query = query.Where(conteudo => conteudo.EmAlta == emAlta.Value);
         }
 
-        return query.OrderBy(conteudo => conteudo.Titulo).ToList();
+        return await query.OrderBy(conteudo => conteudo.Titulo).ToListAsync();
     }
 
     /// <summary>
     /// Retorna apenas os titulos marcados como em alta.
     /// </summary>
-    public IReadOnlyList<ConteudoStreaming> ListarEmAlta() =>
-        _catalogo.Where(conteudo => conteudo.EmAlta).ToList();
+    public async Task<IReadOnlyList<ConteudoStreaming>> ListarEmAltaAsync() =>
+        await context.Conteudos.AsNoTracking()
+            .Where(conteudo => conteudo.EmAlta)
+            .ToListAsync();
 
     /// <summary>
     /// Busca um conteudo pelo identificador.
     /// </summary>
-    public ConteudoStreaming? BuscarConteudoPorId(int id) =>
-        _catalogo.FirstOrDefault(conteudo => conteudo.Id == id);
+    public async Task<ConteudoStreaming?> BuscarConteudoPorIdAsync(int id) =>
+        await context.Conteudos.AsNoTracking()
+            .FirstOrDefaultAsync(conteudo => conteudo.Id == id);
 
     /// <summary>
     /// Adiciona um novo conteudo ao catalogo.
     /// </summary>
-    public ConteudoStreaming AdicionarConteudo(CriarConteudoRequest request)
+    public async Task<ConteudoStreaming> AdicionarConteudoAsync(CriarConteudoRequest request)
     {
         var conteudo = new ConteudoStreaming
         {
-            Id = ObterProximoId(_catalogo.Select(conteudo => conteudo.Id)),
             Titulo = request.Titulo,
             Categoria = request.Categoria,
             Genero = request.Genero,
@@ -194,16 +73,17 @@ public class StreamingRepository
             EmAlta = request.EmAlta
         };
 
-        _catalogo.Add(conteudo);
+        context.Conteudos.Add(conteudo);
+        await context.SaveChangesAsync();
         return conteudo;
     }
 
     /// <summary>
     /// Atualiza os dados de um conteudo existente.
     /// </summary>
-    public ConteudoStreaming? AtualizarConteudo(int id, AtualizarConteudoRequest request)
+    public async Task<ConteudoStreaming?> AtualizarConteudoAsync(int id, AtualizarConteudoRequest request)
     {
-        var conteudo = BuscarConteudoPorId(id);
+        var conteudo = await context.Conteudos.FirstOrDefaultAsync(item => item.Id == id);
 
         if (conteudo is null)
         {
@@ -218,69 +98,74 @@ public class StreamingRepository
         conteudo.ClassificacaoIndicativa = request.ClassificacaoIndicativa;
         conteudo.EmAlta = request.EmAlta;
 
+        await context.SaveChangesAsync();
         return conteudo;
     }
 
     /// <summary>
     /// Remove um conteudo do catalogo.
     /// </summary>
-    public bool RemoverConteudo(int id)
+    public async Task<bool> RemoverConteudoAsync(int id)
     {
-        var conteudo = BuscarConteudoPorId(id);
+        var conteudo = await context.Conteudos.FirstOrDefaultAsync(item => item.Id == id);
 
         if (conteudo is null)
         {
             return false;
         }
 
-        _catalogo.Remove(conteudo);
+        context.Conteudos.Remove(conteudo);
+        await context.SaveChangesAsync();
         return true;
     }
 
     /// <summary>
     /// Retorna os planos de assinatura disponiveis.
     /// </summary>
-    public IReadOnlyList<PlanoStreaming> ListarPlanos() =>
-        _planos.OrderBy(plano => plano.PrecoMensal).ToList();
+    public async Task<IReadOnlyList<PlanoStreaming>> ListarPlanosAsync() =>
+        await context.Planos.AsNoTracking()
+            .OrderBy(plano => plano.PrecoMensal)
+            .ToListAsync();
 
     /// <summary>
     /// Busca um plano pelo identificador.
     /// </summary>
-    public PlanoStreaming? BuscarPlanoPorId(int id) =>
-        _planos.FirstOrDefault(plano => plano.Id == id);
+    public async Task<PlanoStreaming?> BuscarPlanoPorIdAsync(int id) =>
+        await context.Planos.AsNoTracking()
+            .FirstOrDefaultAsync(plano => plano.Id == id);
 
     /// <summary>
     /// Verifica se ja existe um plano com o mesmo nome.
     /// </summary>
-    public bool ExisteNomePlano(string nome, int? ignorarId = null) =>
-        _planos.Any(plano =>
-            plano.Nome.Equals(nome, StringComparison.OrdinalIgnoreCase) &&
+    public async Task<bool> ExisteNomePlanoAsync(string nome, int? ignorarId = null) =>
+        await context.Planos.AnyAsync(plano =>
+            plano.Nome.ToLower() == nome.ToLower() &&
             (!ignorarId.HasValue || plano.Id != ignorarId.Value));
 
     /// <summary>
     /// Adiciona um novo plano de assinatura.
     /// </summary>
-    public PlanoStreaming AdicionarPlano(CriarPlanoRequest request)
+    public async Task<PlanoStreaming> AdicionarPlanoAsync(CriarPlanoRequest request)
     {
         var plano = new PlanoStreaming
         {
-            Id = ObterProximoId(_planos.Select(item => item.Id)),
             Nome = request.Nome,
             PrecoMensal = request.PrecoMensal,
             QualidadeVideo = request.QualidadeVideo,
             QuantidadeTelas = request.QuantidadeTelas
         };
 
-        _planos.Add(plano);
+        context.Planos.Add(plano);
+        await context.SaveChangesAsync();
         return plano;
     }
 
     /// <summary>
     /// Atualiza um plano existente.
     /// </summary>
-    public PlanoStreaming? AtualizarPlano(int id, AtualizarPlanoRequest request)
+    public async Task<PlanoStreaming?> AtualizarPlanoAsync(int id, AtualizarPlanoRequest request)
     {
-        var plano = BuscarPlanoPorId(id);
+        var plano = await context.Planos.FirstOrDefaultAsync(item => item.Id == id);
 
         if (plano is null)
         {
@@ -292,37 +177,43 @@ public class StreamingRepository
         plano.QualidadeVideo = request.QualidadeVideo;
         plano.QuantidadeTelas = request.QuantidadeTelas;
 
+        await context.SaveChangesAsync();
         return plano;
     }
 
     /// <summary>
     /// Remove um plano existente.
     /// </summary>
-    public bool RemoverPlano(int id)
+    public async Task<bool> RemoverPlanoAsync(int id)
     {
-        var plano = BuscarPlanoPorId(id);
+        var plano = await context.Planos.FirstOrDefaultAsync(item => item.Id == id);
 
         if (plano is null)
         {
             return false;
         }
 
-        _planos.Remove(plano);
+        context.Planos.Remove(plano);
+        await context.SaveChangesAsync();
         return true;
     }
 
     /// <summary>
     /// Verifica se um plano possui assinantes vinculados.
     /// </summary>
-    public bool PlanoEstaEmUso(int planoId) =>
-        _assinantes.Any(assinante => assinante.PlanoId == planoId);
+    public async Task<bool> PlanoEstaEmUsoAsync(int planoId) =>
+        await context.Assinantes.AnyAsync(assinante => assinante.PlanoId == planoId);
 
     /// <summary>
     /// Retorna os assinantes cadastrados.
     /// </summary>
-    public IReadOnlyList<AssinanteStreaming> ListarAssinantes(bool? ativo = null, int? planoId = null)
+    public async Task<IReadOnlyList<AssinanteStreaming>> ListarAssinantesAsync(
+        bool? ativo = null,
+        int? planoId = null)
     {
-        IEnumerable<AssinanteStreaming> query = _assinantes;
+        IQueryable<AssinanteStreaming> query = context.Assinantes
+            .AsNoTracking()
+            .Include(assinante => assinante.Perfis);
 
         if (ativo.HasValue)
         {
@@ -334,31 +225,33 @@ public class StreamingRepository
             query = query.Where(assinante => assinante.PlanoId == planoId.Value);
         }
 
-        return query.OrderBy(assinante => assinante.Nome).ToList();
+        return await query.OrderBy(assinante => assinante.Nome).ToListAsync();
     }
 
     /// <summary>
     /// Busca um assinante pelo identificador.
     /// </summary>
-    public AssinanteStreaming? BuscarAssinantePorId(int id) =>
-        _assinantes.FirstOrDefault(assinante => assinante.Id == id);
+    public async Task<AssinanteStreaming?> BuscarAssinantePorIdAsync(int id) =>
+        await context.Assinantes
+            .AsNoTracking()
+            .Include(assinante => assinante.Perfis)
+            .FirstOrDefaultAsync(assinante => assinante.Id == id);
 
     /// <summary>
     /// Verifica se ja existe um assinante com o mesmo email.
     /// </summary>
-    public bool ExisteEmailAssinante(string email, int? ignorarId = null) =>
-        _assinantes.Any(assinante =>
-            assinante.Email.Equals(email, StringComparison.OrdinalIgnoreCase) &&
+    public async Task<bool> ExisteEmailAssinanteAsync(string email, int? ignorarId = null) =>
+        await context.Assinantes.AnyAsync(assinante =>
+            assinante.Email.ToLower() == email.ToLower() &&
             (!ignorarId.HasValue || assinante.Id != ignorarId.Value));
 
     /// <summary>
     /// Adiciona um novo assinante.
     /// </summary>
-    public AssinanteStreaming AdicionarAssinante(CriarAssinanteRequest request)
+    public async Task<AssinanteStreaming> AdicionarAssinanteAsync(CriarAssinanteRequest request)
     {
         var assinante = new AssinanteStreaming
         {
-            Id = ObterProximoId(_assinantes.Select(item => item.Id)),
             Nome = request.Nome,
             Email = request.Email,
             PlanoId = request.PlanoId,
@@ -366,16 +259,17 @@ public class StreamingRepository
             DataAssinatura = DateTime.Now
         };
 
-        _assinantes.Add(assinante);
+        context.Assinantes.Add(assinante);
+        await context.SaveChangesAsync();
         return assinante;
     }
 
     /// <summary>
     /// Atualiza os dados de um assinante.
     /// </summary>
-    public AssinanteStreaming? AtualizarAssinante(int id, AtualizarAssinanteRequest request)
+    public async Task<AssinanteStreaming?> AtualizarAssinanteAsync(int id, AtualizarAssinanteRequest request)
     {
-        var assinante = BuscarAssinantePorId(id);
+        var assinante = await context.Assinantes.FirstOrDefaultAsync(item => item.Id == id);
 
         if (assinante is null)
         {
@@ -387,116 +281,132 @@ public class StreamingRepository
         assinante.PlanoId = request.PlanoId;
         assinante.Ativo = request.Ativo;
 
+        await context.SaveChangesAsync();
         return assinante;
     }
 
     /// <summary>
     /// Remove um assinante do sistema.
     /// </summary>
-    public bool RemoverAssinante(int id)
+    public async Task<bool> RemoverAssinanteAsync(int id)
     {
-        var assinante = BuscarAssinantePorId(id);
+        var assinante = await context.Assinantes.FirstOrDefaultAsync(item => item.Id == id);
 
         if (assinante is null)
         {
             return false;
         }
 
-        _assinantes.Remove(assinante);
+        context.Assinantes.Remove(assinante);
+        await context.SaveChangesAsync();
         return true;
     }
 
     /// <summary>
     /// Retorna os perfis de um assinante.
     /// </summary>
-    public IReadOnlyList<PerfilStreaming> ListarPerfis(int assinanteId) =>
-        BuscarAssinantePorId(assinanteId)?.Perfis.OrderBy(perfil => perfil.Nome).ToList() ??
-        [];
+    public async Task<IReadOnlyList<PerfilStreaming>> ListarPerfisAsync(int assinanteId) =>
+        await context.Perfis.AsNoTracking()
+            .Where(perfil => perfil.AssinanteId == assinanteId)
+            .OrderBy(perfil => perfil.Nome)
+            .ToListAsync();
 
     /// <summary>
     /// Verifica se o assinante ainda pode criar mais perfis.
     /// </summary>
-    public bool PodeAdicionarMaisPerfis(int assinanteId)
+    public async Task<bool> PodeAdicionarMaisPerfisAsync(int assinanteId)
     {
-        var assinante = BuscarAssinantePorId(assinanteId);
-        return assinante is not null && assinante.Perfis.Count < LimitePerfisPorAssinante;
+        var assinanteExiste = await context.Assinantes.AnyAsync(assinante => assinante.Id == assinanteId);
+        if (!assinanteExiste)
+        {
+            return false;
+        }
+
+        var totalPerfis = await context.Perfis.CountAsync(perfil => perfil.AssinanteId == assinanteId);
+        return totalPerfis < LimitePerfisPorAssinante;
     }
 
     /// <summary>
     /// Verifica se ja existe um perfil com o mesmo nome para o assinante.
     /// </summary>
-    public bool ExisteNomePerfil(int assinanteId, string nome) =>
-        BuscarAssinantePorId(assinanteId)?.Perfis.Any(perfil =>
-            perfil.Nome.Equals(nome, StringComparison.OrdinalIgnoreCase)) ?? false;
+    public async Task<bool> ExisteNomePerfilAsync(int assinanteId, string nome) =>
+        await context.Perfis.AnyAsync(perfil =>
+            perfil.AssinanteId == assinanteId &&
+            perfil.Nome.ToLower() == nome.ToLower());
 
     /// <summary>
     /// Adiciona um novo perfil para um assinante.
     /// </summary>
-    public PerfilStreaming? AdicionarPerfil(int assinanteId, CriarPerfilRequest request)
+    public async Task<PerfilStreaming?> AdicionarPerfilAsync(int assinanteId, CriarPerfilRequest request)
     {
-        var assinante = BuscarAssinantePorId(assinanteId);
-
-        if (assinante is null)
+        var assinanteExiste = await context.Assinantes.AnyAsync(assinante => assinante.Id == assinanteId);
+        if (!assinanteExiste)
         {
             return null;
         }
 
         var perfil = new PerfilStreaming
         {
-            Id = ObterProximoId(assinante.Perfis.Select(item => item.Id)),
             Nome = request.Nome,
             Idioma = request.Idioma,
-            Infantil = request.Infantil
+            Infantil = request.Infantil,
+            AssinanteId = assinanteId
         };
 
-        assinante.Perfis.Add(perfil);
+        context.Perfis.Add(perfil);
+        await context.SaveChangesAsync();
         return perfil;
     }
 
     /// <summary>
     /// Remove um perfil de um assinante.
     /// </summary>
-    public bool RemoverPerfil(int assinanteId, int perfilId)
+    public async Task<bool> RemoverPerfilAsync(int assinanteId, int perfilId)
     {
-        var assinante = BuscarAssinantePorId(assinanteId);
-
-        if (assinante is null)
-        {
-            return false;
-        }
-
-        var perfil = assinante.Perfis.FirstOrDefault(item => item.Id == perfilId);
+        var perfil = await context.Perfis
+            .FirstOrDefaultAsync(item => item.Id == perfilId && item.AssinanteId == assinanteId);
 
         if (perfil is null)
         {
             return false;
         }
 
-        assinante.Perfis.Remove(perfil);
+        context.Perfis.Remove(perfil);
+        await context.SaveChangesAsync();
         return true;
     }
 
     /// <summary>
     /// Retorna um resumo geral da plataforma.
     /// </summary>
-    public ResumoStreaming ObterResumo()
+    public async Task<ResumoStreaming> ObterResumoAsync()
     {
-        var assinantesAtivos = _assinantes.Where(assinante => assinante.Ativo).ToList();
+        var totalConteudos = await context.Conteudos.CountAsync();
+        var totalConteudosEmAlta = await context.Conteudos.CountAsync(conteudo => conteudo.EmAlta);
+        var totalPlanos = await context.Planos.CountAsync();
+        var totalAssinantes = await context.Assinantes.CountAsync();
+        var totalAssinantesAtivos = await context.Assinantes.CountAsync(assinante => assinante.Ativo);
+        var totalPerfis = await context.Perfis.CountAsync();
+
+        var faturamentoMensalEstimado = await context.Assinantes
+            .Where(assinante => assinante.Ativo)
+            .Join(context.Planos,
+                assinante => assinante.PlanoId,
+                plano => plano.Id,
+                (_, plano) => plano.PrecoMensal)
+            .DefaultIfEmpty(0m)
+            .SumAsync();
 
         return new ResumoStreaming
         {
             DataGeracao = DateTime.Now,
-            TotalConteudos = _catalogo.Count,
-            TotalConteudosEmAlta = _catalogo.Count(conteudo => conteudo.EmAlta),
-            TotalPlanos = _planos.Count,
-            TotalAssinantes = _assinantes.Count,
-            TotalAssinantesAtivos = assinantesAtivos.Count,
-            TotalPerfis = _assinantes.Sum(assinante => assinante.Perfis.Count),
-            FaturamentoMensalEstimado = assinantesAtivos.Sum(assinante =>
-                BuscarPlanoPorId(assinante.PlanoId)?.PrecoMensal ?? 0m)
+            TotalConteudos = totalConteudos,
+            TotalConteudosEmAlta = totalConteudosEmAlta,
+            TotalPlanos = totalPlanos,
+            TotalAssinantes = totalAssinantes,
+            TotalAssinantesAtivos = totalAssinantesAtivos,
+            TotalPerfis = totalPerfis,
+            FaturamentoMensalEstimado = faturamentoMensalEstimado
         };
     }
-
-    private static int ObterProximoId(IEnumerable<int> ids) =>
-        ids.DefaultIfEmpty(0).Max() + 1;
 }

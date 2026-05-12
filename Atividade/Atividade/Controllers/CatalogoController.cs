@@ -20,12 +20,12 @@ public class CatalogoController(StreamingRepository repository) : ControllerBase
     /// <returns>Uma lista com filmes, series e documentarios.</returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult Get(
+    public async Task<IActionResult> Get(
         [FromQuery] string? categoria,
         [FromQuery] string? genero,
         [FromQuery] bool? emAlta)
     {
-        var catalogo = repository.ListarCatalogo(categoria, genero, emAlta);
+        var catalogo = await repository.ListarCatalogoAsync(categoria, genero, emAlta);
         return Ok(catalogo);
     }
 
@@ -35,9 +35,9 @@ public class CatalogoController(StreamingRepository repository) : ControllerBase
     /// <returns>Uma lista com os destaques do catalogo.</returns>
     [HttpGet("em-alta")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult GetEmAlta()
+    public async Task<IActionResult> GetEmAlta()
     {
-        var conteudosEmAlta = repository.ListarEmAlta();
+        var conteudosEmAlta = await repository.ListarEmAltaAsync();
         return Ok(conteudosEmAlta);
     }
 
@@ -49,9 +49,9 @@ public class CatalogoController(StreamingRepository repository) : ControllerBase
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        var conteudo = repository.BuscarConteudoPorId(id);
+        var conteudo = await repository.BuscarConteudoPorIdAsync(id);
 
         if (conteudo is null)
         {
@@ -69,9 +69,9 @@ public class CatalogoController(StreamingRepository repository) : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Post([FromBody] CriarConteudoRequest request)
+    public async Task<IActionResult> Post([FromBody] CriarConteudoRequest request)
     {
-        var conteudo = repository.AdicionarConteudo(request);
+        var conteudo = await repository.AdicionarConteudoAsync(request);
         return CreatedAtAction(nameof(GetById), new { id = conteudo.Id }, conteudo);
     }
 
@@ -85,9 +85,9 @@ public class CatalogoController(StreamingRepository repository) : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Put(int id, [FromBody] AtualizarConteudoRequest request)
+    public async Task<IActionResult> Put(int id, [FromBody] AtualizarConteudoRequest request)
     {
-        var conteudoAtualizado = repository.AtualizarConteudo(id, request);
+        var conteudoAtualizado = await repository.AtualizarConteudoAsync(id, request);
 
         if (conteudoAtualizado is null)
         {
@@ -105,9 +105,9 @@ public class CatalogoController(StreamingRepository repository) : ControllerBase
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        var removido = repository.RemoverConteudo(id);
+        var removido = await repository.RemoverConteudoAsync(id);
 
         if (!removido)
         {

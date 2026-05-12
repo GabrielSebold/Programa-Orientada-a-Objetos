@@ -180,130 +180,135 @@
         </member>
         <member name="T:Atividade.Services.StreamingRepository">
             <summary>
-            Repositorio em memoria com dados de exemplo do streaming.
+            Repositorio com persistencia via Entity Framework Core.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.ListarCatalogo(System.String,System.String,System.Nullable{System.Boolean})">
+        <member name="M:Atividade.Services.StreamingRepository.#ctor(Atividade.Data.StreamingDbContext)">
+            <summary>
+            Repositorio com persistencia via Entity Framework Core.
+            </summary>
+        </member>
+        <member name="M:Atividade.Services.StreamingRepository.ListarCatalogoAsync(System.String,System.String,System.Nullable{System.Boolean})">
             <summary>
             Retorna todos os titulos do catalogo.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.ListarEmAlta">
+        <member name="M:Atividade.Services.StreamingRepository.ListarEmAltaAsync">
             <summary>
             Retorna apenas os titulos marcados como em alta.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.BuscarConteudoPorId(System.Int32)">
+        <member name="M:Atividade.Services.StreamingRepository.BuscarConteudoPorIdAsync(System.Int32)">
             <summary>
             Busca um conteudo pelo identificador.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.AdicionarConteudo(Atividade.Requests.CriarConteudoRequest)">
+        <member name="M:Atividade.Services.StreamingRepository.AdicionarConteudoAsync(Atividade.Requests.CriarConteudoRequest)">
             <summary>
             Adiciona um novo conteudo ao catalogo.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.AtualizarConteudo(System.Int32,Atividade.Requests.AtualizarConteudoRequest)">
+        <member name="M:Atividade.Services.StreamingRepository.AtualizarConteudoAsync(System.Int32,Atividade.Requests.AtualizarConteudoRequest)">
             <summary>
             Atualiza os dados de um conteudo existente.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.RemoverConteudo(System.Int32)">
+        <member name="M:Atividade.Services.StreamingRepository.RemoverConteudoAsync(System.Int32)">
             <summary>
             Remove um conteudo do catalogo.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.ListarPlanos">
+        <member name="M:Atividade.Services.StreamingRepository.ListarPlanosAsync">
             <summary>
             Retorna os planos de assinatura disponiveis.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.BuscarPlanoPorId(System.Int32)">
+        <member name="M:Atividade.Services.StreamingRepository.BuscarPlanoPorIdAsync(System.Int32)">
             <summary>
             Busca um plano pelo identificador.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.ExisteNomePlano(System.String,System.Nullable{System.Int32})">
+        <member name="M:Atividade.Services.StreamingRepository.ExisteNomePlanoAsync(System.String,System.Nullable{System.Int32})">
             <summary>
             Verifica se ja existe um plano com o mesmo nome.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.AdicionarPlano(Atividade.Requests.CriarPlanoRequest)">
+        <member name="M:Atividade.Services.StreamingRepository.AdicionarPlanoAsync(Atividade.Requests.CriarPlanoRequest)">
             <summary>
             Adiciona um novo plano de assinatura.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.AtualizarPlano(System.Int32,Atividade.Requests.AtualizarPlanoRequest)">
+        <member name="M:Atividade.Services.StreamingRepository.AtualizarPlanoAsync(System.Int32,Atividade.Requests.AtualizarPlanoRequest)">
             <summary>
             Atualiza um plano existente.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.RemoverPlano(System.Int32)">
+        <member name="M:Atividade.Services.StreamingRepository.RemoverPlanoAsync(System.Int32)">
             <summary>
             Remove um plano existente.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.PlanoEstaEmUso(System.Int32)">
+        <member name="M:Atividade.Services.StreamingRepository.PlanoEstaEmUsoAsync(System.Int32)">
             <summary>
             Verifica se um plano possui assinantes vinculados.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.ListarAssinantes(System.Nullable{System.Boolean},System.Nullable{System.Int32})">
+        <member name="M:Atividade.Services.StreamingRepository.ListarAssinantesAsync(System.Nullable{System.Boolean},System.Nullable{System.Int32})">
             <summary>
             Retorna os assinantes cadastrados.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.BuscarAssinantePorId(System.Int32)">
+        <member name="M:Atividade.Services.StreamingRepository.BuscarAssinantePorIdAsync(System.Int32)">
             <summary>
             Busca um assinante pelo identificador.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.ExisteEmailAssinante(System.String,System.Nullable{System.Int32})">
+        <member name="M:Atividade.Services.StreamingRepository.ExisteEmailAssinanteAsync(System.String,System.Nullable{System.Int32})">
             <summary>
             Verifica se ja existe um assinante com o mesmo email.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.AdicionarAssinante(Atividade.Requests.CriarAssinanteRequest)">
+        <member name="M:Atividade.Services.StreamingRepository.AdicionarAssinanteAsync(Atividade.Requests.CriarAssinanteRequest)">
             <summary>
             Adiciona um novo assinante.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.AtualizarAssinante(System.Int32,Atividade.Requests.AtualizarAssinanteRequest)">
+        <member name="M:Atividade.Services.StreamingRepository.AtualizarAssinanteAsync(System.Int32,Atividade.Requests.AtualizarAssinanteRequest)">
             <summary>
             Atualiza os dados de um assinante.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.RemoverAssinante(System.Int32)">
+        <member name="M:Atividade.Services.StreamingRepository.RemoverAssinanteAsync(System.Int32)">
             <summary>
             Remove um assinante do sistema.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.ListarPerfis(System.Int32)">
+        <member name="M:Atividade.Services.StreamingRepository.ListarPerfisAsync(System.Int32)">
             <summary>
             Retorna os perfis de um assinante.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.PodeAdicionarMaisPerfis(System.Int32)">
+        <member name="M:Atividade.Services.StreamingRepository.PodeAdicionarMaisPerfisAsync(System.Int32)">
             <summary>
             Verifica se o assinante ainda pode criar mais perfis.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.ExisteNomePerfil(System.Int32,System.String)">
+        <member name="M:Atividade.Services.StreamingRepository.ExisteNomePerfilAsync(System.Int32,System.String)">
             <summary>
             Verifica se ja existe um perfil com o mesmo nome para o assinante.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.AdicionarPerfil(System.Int32,Atividade.Requests.CriarPerfilRequest)">
+        <member name="M:Atividade.Services.StreamingRepository.AdicionarPerfilAsync(System.Int32,Atividade.Requests.CriarPerfilRequest)">
             <summary>
             Adiciona um novo perfil para um assinante.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.RemoverPerfil(System.Int32,System.Int32)">
+        <member name="M:Atividade.Services.StreamingRepository.RemoverPerfilAsync(System.Int32,System.Int32)">
             <summary>
             Remove um perfil de um assinante.
             </summary>
         </member>
-        <member name="M:Atividade.Services.StreamingRepository.ObterResumo">
+        <member name="M:Atividade.Services.StreamingRepository.ObterResumoAsync">
             <summary>
             Retorna um resumo geral da plataforma.
             </summary>

@@ -1,36 +1,29 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Gabri\\source\\repos\\Atividade\\Atividade\\Atividade.csproj": {}
+    "C:\\Users\\casan\\Desktop\\faculdade\\programacao-orientada-objeto-2\\Programa-Orientada-a-Objetos\\Atividade\\Atividade\\Atividade.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Gabri\\source\\repos\\Atividade\\Atividade\\Atividade.csproj": {
+    "C:\\Users\\casan\\Desktop\\faculdade\\programacao-orientada-objeto-2\\Programa-Orientada-a-Objetos\\Atividade\\Atividade\\Atividade.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Gabri\\source\\repos\\Atividade\\Atividade\\Atividade.csproj",
+        "projectUniqueName": "C:\\Users\\casan\\Desktop\\faculdade\\programacao-orientada-objeto-2\\Programa-Orientada-a-Objetos\\Atividade\\Atividade\\Atividade.csproj",
         "projectName": "Atividade",
-        "projectPath": "C:\\Users\\Gabri\\source\\repos\\Atividade\\Atividade\\Atividade.csproj",
-        "packagesPath": "C:\\Users\\Gabri\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Gabri\\source\\repos\\Atividade\\Atividade\\obj\\",
+        "projectPath": "C:\\Users\\casan\\Desktop\\faculdade\\programacao-orientada-objeto-2\\Programa-Orientada-a-Objetos\\Atividade\\Atividade\\Atividade.csproj",
+        "packagesPath": "C:\\Users\\casan\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\casan\\Desktop\\faculdade\\programacao-orientada-objeto-2\\Programa-Orientada-a-Objetos\\Atividade\\Atividade\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Gabri\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\casan\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {}
           }
@@ -45,13 +38,16 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.300"
+        "SdkAnalysisLevel": "10.0.200"
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[10.0.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[10.1.7, )"
@@ -76,7 +72,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300-preview.0.26177.108/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

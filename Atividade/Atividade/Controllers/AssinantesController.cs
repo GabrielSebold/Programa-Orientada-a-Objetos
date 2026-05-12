@@ -10,18 +10,18 @@ public class AssinantesController(StreamingRepository repository) : ControllerBa
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult Get([FromQuery] bool? ativo, [FromQuery] int? planoId)
+    public async Task<IActionResult> Get([FromQuery] bool? ativo, [FromQuery] int? planoId)
     {
-        var assinantes = repository.ListarAssinantes(ativo, planoId);
+        var assinantes = await repository.ListarAssinantesAsync(ativo, planoId);
         return Ok(assinantes);
     }
 
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        var assinante = repository.BuscarAssinantePorId(id);
+        var assinante = await repository.BuscarAssinantePorIdAsync(id);
 
         if (assinante is null)
         {
@@ -35,19 +35,19 @@ public class AssinantesController(StreamingRepository repository) : ControllerBa
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public IActionResult Post([FromBody] CriarAssinanteRequest request)
+    public async Task<IActionResult> Post([FromBody] CriarAssinanteRequest request)
     {
-        if (repository.BuscarPlanoPorId(request.PlanoId) is null)
+        if (await repository.BuscarPlanoPorIdAsync(request.PlanoId) is null)
         {
             return BadRequest(new { mensagem = "Plano informado nao existe." });
         }
 
-        if (repository.ExisteEmailAssinante(request.Email))
+        if (await repository.ExisteEmailAssinanteAsync(request.Email))
         {
             return Conflict(new { mensagem = "Ja existe um assinante com esse email." });
         }
 
-        var assinante = repository.AdicionarAssinante(request);
+        var assinante = await repository.AdicionarAssinanteAsync(request);
         return CreatedAtAction(nameof(GetById), new { id = assinante.Id }, assinante);
     }
 
@@ -56,33 +56,33 @@ public class AssinantesController(StreamingRepository repository) : ControllerBa
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public IActionResult Put(int id, [FromBody] AtualizarAssinanteRequest request)
+    public async Task<IActionResult> Put(int id, [FromBody] AtualizarAssinanteRequest request)
     {
-        if (repository.BuscarAssinantePorId(id) is null)
+        if (await repository.BuscarAssinantePorIdAsync(id) is null)
         {
             return NotFound(new { mensagem = "Assinante nao encontrado." });
         }
 
-        if (repository.BuscarPlanoPorId(request.PlanoId) is null)
+        if (await repository.BuscarPlanoPorIdAsync(request.PlanoId) is null)
         {
             return BadRequest(new { mensagem = "Plano informado nao existe." });
         }
 
-        if (repository.ExisteEmailAssinante(request.Email, id))
+        if (await repository.ExisteEmailAssinanteAsync(request.Email, id))
         {
             return Conflict(new { mensagem = "Ja existe um assinante com esse email." });
         }
 
-        var assinanteAtualizado = repository.AtualizarAssinante(id, request);
+        var assinanteAtualizado = await repository.AtualizarAssinanteAsync(id, request);
         return Ok(assinanteAtualizado);
     }
 
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        var removido = repository.RemoverAssinante(id);
+        var removido = await repository.RemoverAssinanteAsync(id);
 
         if (!removido)
         {
@@ -95,14 +95,14 @@ public class AssinantesController(StreamingRepository repository) : ControllerBa
     [HttpGet("{id:int}/perfis")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetPerfis(int id)
+    public async Task<IActionResult> GetPerfis(int id)
     {
-        if (repository.BuscarAssinantePorId(id) is null)
+        if (await repository.BuscarAssinantePorIdAsync(id) is null)
         {
             return NotFound(new { mensagem = "Assinante nao encontrado." });
         }
 
-        return Ok(repository.ListarPerfis(id));
+        return Ok(await repository.ListarPerfisAsync(id));
     }
 
     [HttpPost("{id:int}/perfis")]
@@ -110,38 +110,38 @@ public class AssinantesController(StreamingRepository repository) : ControllerBa
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public IActionResult PostPerfil(int id, [FromBody] CriarPerfilRequest request)
+    public async Task<IActionResult> PostPerfil(int id, [FromBody] CriarPerfilRequest request)
     {
-        if (repository.BuscarAssinantePorId(id) is null)
+        if (await repository.BuscarAssinantePorIdAsync(id) is null)
         {
             return NotFound(new { mensagem = "Assinante nao encontrado." });
         }
 
-        if (!repository.PodeAdicionarMaisPerfis(id))
+        if (!await repository.PodeAdicionarMaisPerfisAsync(id))
         {
             return Conflict(new { mensagem = "O assinante atingiu o limite maximo de perfis." });
         }
 
-        if (repository.ExisteNomePerfil(id, request.Nome))
+        if (await repository.ExisteNomePerfilAsync(id, request.Nome))
         {
             return Conflict(new { mensagem = "Ja existe um perfil com esse nome para o assinante." });
         }
 
-        var perfil = repository.AdicionarPerfil(id, request);
+        var perfil = await repository.AdicionarPerfilAsync(id, request);
         return CreatedAtAction(nameof(GetPerfis), new { id }, perfil);
     }
 
     [HttpDelete("{id:int}/perfis/{perfilId:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult DeletePerfil(int id, int perfilId)
+    public async Task<IActionResult> DeletePerfil(int id, int perfilId)
     {
-        if (repository.BuscarAssinantePorId(id) is null)
+        if (await repository.BuscarAssinantePorIdAsync(id) is null)
         {
             return NotFound(new { mensagem = "Assinante nao encontrado." });
         }
 
-        var removido = repository.RemoverPerfil(id, perfilId);
+        var removido = await repository.RemoverPerfilAsync(id, perfilId);
 
         if (!removido)
         {
