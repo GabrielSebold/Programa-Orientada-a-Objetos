@@ -1,6 +1,6 @@
 # Programa-o-Orientada-a-Objetos
 
-## Passo a passo para testar (iniciante em C#)
+## Passo a passo para testar
 ### 1) Requisitos
 - Windows com .NET SDK instalado (versao compatível com o projeto).
 - VS Code ou Visual Studio (qualquer um serve).
