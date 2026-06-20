@@ -1,57 +1,88 @@
-# Programa-o-Orientada-a-Objetos
+# StreamFlix — Frontend React para API de Streaming
 
-## Passo a passo para testar
-### 1) Requisitos
-- Windows com .NET SDK instalado (versao compatível com o projeto).
-- VS Code ou Visual Studio (qualquer um serve).
+Frontend desenvolvido em **React JS** com **Vite** para consumir o WebService REST da **API de Streaming** (ASP.NET / C#).
 
-### 2) Abrir o projeto no VS Code
-1. Abra o VS Code.
-2. Clique em **File > Open Folder**.
-3. Selecione a pasta `Programa-Orientada-a-Objetos`.
+## Tecnologias
 
-### 3) Executar a API pelo terminal (VS Code)
-1. Abra o terminal do VS Code (**Terminal > New Terminal**).
-2. Entre na pasta do projeto:
-	 - `Atividade/Atividade`
-3. Rode o comando para iniciar a API:
-	 - `dotnet run`
-4. O terminal vai mostrar a URL, algo como:
-	 - `https://localhost:xxxx` e `http://localhost:yyyy`
+- **React 19** + **Vite 8**
+- **React Router DOM** — navegação SPA
+- **Axios** — requisições HTTP à API REST
+- CSS puro — design system próprio com tema escuro premium
 
-### 4) Acessar o Swagger
-- Abra o navegador e acesse:
-	- `https://localhost:xxxx/swagger`
-- Use a porta exibida no terminal.
-- Se aparecer aviso de certificado HTTPS, clique em **Avancar**.
+## Recursos Implementados (4 serviços com CRUD completo)
 
-### 5) Testar endpoints no Swagger
-1. Clique em um endpoint, por exemplo **GET /api/catalogo**.
-2. Clique em **Try it out**.
-3. Clique em **Execute**.
-4. Veja o **Response body** com o retorno.
+| Recurso | Endpoints | Operações |
+|---|---|---|
+| **Planos** | `GET/POST/PUT/DELETE /api/planos` | Listar, criar, editar, excluir planos |
+| **Catálogo** | `GET/POST/PUT/DELETE /api/catalogo` | Listar com filtros, criar, editar, excluir conteúdos |
+| **Assinantes** | `GET/POST/PUT/DELETE /api/assinantes` | Listar com filtros, criar, editar, excluir assinantes |
+| **Perfis** | `GET/POST/DELETE /api/assinantes/:id/perfis` | Gerenciar perfis vinculados a cada assinante |
 
-### 6) Testar com Insomnia ou Postman (opcional)
-- Base URL: `https://localhost:xxxx`
-- Exemplo GET: `/api/planos`
-- Exemplo POST: `/api/assinantes`
+## Estrutura de Pastas
 
-Exemplo de JSON para criar assinante:
-{
-	"nome": "Joao Silva",
-	"email": "joao@email.com",
-	"planoId": 1,
-	"ativo": true
-}
+```
+frontend-streaming/
+  src/
+    servicos/
+      api.js                    ← configuração base do Axios (URL base do backend)
+      planosServico.js          ← CRUD de planos
+      catalogoServico.js        ← CRUD do catálogo
+      assinantesServico.js      ← CRUD de assinantes
+      perfisServico.js          ← GET/POST/DELETE de perfis
 
-### Observacoes
-- O banco SQLite e criado automaticamente ao iniciar a API.
-- O arquivo do banco e `streaming.db` na pasta do projeto `Atividade/Atividade`.
-- O primeiro inicio cria e preenche o banco com dados de exemplo.
+    componentes/
+      Menu.jsx                  ← navegação com destaque de rota ativa
+      Menu.css
+      Carregando.jsx            ← spinner de carregamento reutilizável
 
-### Endpoints principais
-- GET /api/dashboard/resumo
-- GET /api/catalogo
-- GET /api/catalogo/em-alta
-- GET /api/planos
-- GET /api/assinantes
+    paginas/
+      Inicio.jsx                ← dashboard com estatísticas e conteúdos em alta
+      Planos/
+        Listar.jsx              ← listagem em cards com exclusão confirmada
+        Formulario.jsx          ← criar e editar planos
+      Catalogo/
+        Listar.jsx              ← tabela com filtros por categoria/gênero/em alta
+        Formulario.jsx          ← criar e editar conteúdos
+      Assinantes/
+        Listar.jsx              ← tabela com filtros por status/plano
+        Formulario.jsx          ← criar e editar assinantes (com lista de planos)
+        Perfis.jsx              ← gerenciar perfis de um assinante
+
+    App.jsx                     ← rotas com React Router
+    main.jsx
+    index.css                   ← design system completo (tema dark)
+```
+
+## Como executar
+
+### 1. Iniciar o Backend (ASP.NET)
+
+```bash
+cd Atividade/Atividade
+dotnet run --launch-profile http
+# API disponível em: http://localhost:5083
+# Swagger: http://localhost:5083/swagger
+```
+
+### 2. Iniciar o Frontend (React)
+
+```bash
+cd frontend-streaming
+npm install   # apenas na primeira vez
+npm run dev
+# Frontend disponível em: http://localhost:5173
+```
+
+> O CORS já está configurado no backend para aceitar requisições de `http://localhost:5173`.
+
+## Funcionalidades
+
+- ✅ Dashboard com estatísticas em tempo real (planos, conteúdos, assinantes, em alta)
+- ✅ CRUD completo de **Planos** (criar, listar, editar, excluir)
+- ✅ CRUD completo do **Catálogo** com filtros por categoria, gênero e destaque
+- ✅ CRUD completo de **Assinantes** com filtros por status e plano
+- ✅ Gerenciamento de **Perfis** por assinante (GET/POST/DELETE)
+- ✅ Formulários com validação frontend e feedback de erros da API
+- ✅ Confirmação antes de excluir
+- ✅ Tratamento de erros de conexão
+- ✅ Design responsivo com tema dark premium

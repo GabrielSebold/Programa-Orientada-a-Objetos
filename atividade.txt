@@ -1,0 +1,8 @@
+Atividades e requisitos:
+
+- Criar um projeto de Frontend para interagir com o WebService REST Backend desenvolvido anteriormente.
+- O Frontend pode ser desenvolvido em React JS como fizemos em sala, ou também pode ser utilizado outra linguagem, desde que, orientada a objetos.
+- Integrar o Frontend com o Backend.
+- Criar rotinas de acesso aos serviços e recursos do WebService. Deve ser implementado pelo menos quatro serviços, cada serviço com os métodos GET, POST, PUT e DELETE do CRUD.
+- Será avaliado o visual do projeto, a implementação das rotinas de consumo dos serviços do WebService, o funcionamento da integração com WebService e a estrutura do código fonte.
+- Individual ou em dupla conforme trabalhado no Backend.
